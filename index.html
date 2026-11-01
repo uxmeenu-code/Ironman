@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PressUp – Apartment Ironing</title>
+<style>
+:root{--bg:#f6f5f1;--sf:#fff;--tx:#1d1d1b;--mu:#6b6a64;--bd:#e3e1d9;--ac:#0f6e56;--acx:#e1f5ee;--wn:#b4570a;--wnx:#fdf0e0;--er:#b3261e;--erx:#fcebea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161614;--sf:#211f1d;--tx:#f1efe8;--mu:#a09e95;--bd:#34322e;--ac:#5dcaa5;--acx:#0f3b2f;--wn:#f0a050;--wnx:#3a2814;--er:#f28b82;--erx:#3d1c1a}}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--sf);border-bottom:1px solid var(--bd);padding:10px 14px}
+h1{font-size:17px;margin:0 0 8px}h2{font-size:15px;margin:18px 0 8px}h3{font-size:14px;margin:0}
+.roles,.tabs{display:flex;gap:6px;overflow-x:auto}
+.roles button,.tabs button{flex:1;white-space:nowrap;padding:7px 10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:8px;font:inherit;font-size:13px;cursor:pointer}
+.roles button.on,.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.tabs{margin-bottom:12px}
+main{max-width:760px;margin:0 auto;padding:14px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:10px}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between}.wrap{flex-wrap:wrap}
+input,select{width:100%;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit;margin:4px 0}
+input.s{width:70px}
+.btn{padding:9px 14px;border:0;border-radius:8px;background:var(--ac);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+.btn.g{background:var(--bg);color:var(--tx);border:1px solid var(--bd)}.btn.r{background:var(--er)}.btn.w{width:100%}.btn.sm{padding:6px 10px;font-size:13px}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;background:var(--acx);color:var(--ac)}
+.pill.w{background:var(--wnx);color:var(--wn)}.pill.e{background:var(--erx);color:var(--er)}
+.mu{color:var(--mu);font-size:13px}.warn{background:var(--wnx);color:var(--wn);padding:8px;border-radius:8px;font-size:13px;margin:6px 0}
+.lbl{font-family:ui-monospace,monospace;background:var(--tx);color:var(--bg);padding:2px 8px;border-radius:5px;font-size:13px}
+.steps{display:flex;gap:4px;margin:10px 0 4px}.steps i{flex:1;height:6px;border-radius:3px;background:var(--bd)}.steps i.d{background:var(--ac)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:12px}
+.cal div{border:1px solid var(--bd);border-radius:8px;padding:6px 2px;background:var(--bg)}.cal .on{background:var(--acx);border-color:var(--ac);color:var(--ac);font-weight:600}
+.item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd)}
+.q{display:flex;gap:10px;align-items:center}.q button{width:30px;height:30px;border-radius:50%;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px;cursor:pointer}
+svg g text{pointer-events:none}svg text{fill:var(--tx);font-family:system-ui;font-size:10px}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:13px;z-index:9}
+input[type=checkbox]{width:24px;height:24px;margin:0}a{color:var(--ac)}
+.bn{position:fixed;left:0;right:0;bottom:0;z-index:8;display:flex;gap:6px;background:var(--sf);border-top:1px solid var(--bd);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px))}
+.bn button{flex:1;min-height:46px;border:0;border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;font-size:13px;font-weight:600}.bn button.on{background:var(--ac);color:#fff}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}
+.sh{background:var(--sf);width:100%;max-width:520px;border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.lc{border:2px dashed var(--tx);border-radius:12px;padding:14px;text-align:center;margin-bottom:12px}
+@media(max-width:520px){main{padding:10px}input,select{font-size:16px}.btn{min-height:44px}.btn.sm{min-height:40px}.roles button{font-size:12px;padding:8px 4px}}
+.ms{display:flex;gap:10px;align-items:flex-start;padding:4px 0}.ms b{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;background:var(--bd);color:var(--mu);flex:none}.ms.d b{background:var(--ac);color:#fff}.ms.c b{background:var(--wn);color:#fff}.av{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none}
+</style></head><body>
+<header><h1>PressUp <span class="mu">· demo data</span></h1>
+<div class="roles" id="roles"></div></header>
+<main id="app"></main>
+<script>
+const ST=['booked','accepted','collected','dropped','ironing','qc','approved','pickedup','delivered'];
+const LB={booked:'Booked',accepted:'Pickup accepted',dropped:'Dropped to iron man',pickedup:'Picked up from iron man',collected:'Collected',ironing:'Being ironed',qc:'Quality check',approved:'Approved',out:'Out for delivery',delivered:'Delivered',flagged:'Issue flagged'};
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const S={
+ price:{Shirt:15,'T-shirt':10,Trousers:15,Kurta:20,Saree:40,Bedsheet:30},
+ apts:[
+  {id:1,name:'Sample Heights',area:'Whitefield',x:250,y:60,sch:{Mon:'7–9 AM',Thu:'6–8 PM',Sat:'8–10 AM'}},
+  {id:2,name:'Lakeview Residency',area:'Bellandur',x:90,y:150,sch:{Tue:'7–9 AM',Fri:'6–8 PM'}},
+  {id:3,name:'Green Park Towers',area:'Marathahalli',x:200,y:170,sch:{Wed:'6–8 PM',Sun:'9–11 AM'}},
+  {id:4,name:'Orchid Enclave',area:'Panathur',x:300,y:130,sch:{Mon:'6–8 PM',Fri:'7–9 AM'}}],
+ reqs:[],
+ partners:[
+  {id:1,name:'Lakshmi Press',area:'Whitefield',cap:60,av:'Mon–Sat, 9–7',ok:1,notes:[]},
+  {id:2,name:'Ravi Iron Works',area:'Bellandur',cap:80,av:'Daily, 8–8',ok:1,notes:[]},
+  {id:3,name:'Fresh Fold',area:'Marathahalli',cap:50,av:'Mon–Fri, 10–6',ok:1,notes:[]}],
+ orders:[],n:1000,users:[],session:null
+};
+const KEY='pressup1';
+try{const x=JSON.parse(localStorage.getItem(KEY));if(x)Object.assign(S,x)}catch(e){}
+let curRole='Customer',cs={tab:'apt',apt:null,cart:{},flat:'',pay:'UPI',q:'',name:'',phone:''},sf=0,pid=1,atab='Overview',tm;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const apt=id=>S.apts.find(a=>a.id==id);const pr=id=>S.partners.find(p=>p.id==id);
+const code=o=>apt(o.apt).name.split(' ').map(w=>w[0]).join('').toUpperCase()+'-'+o.flat+'-'+o.id;
+const cnt=o=>Object.values(o.items).reduce((a,b)=>a+b,0);
+const partnersNear=a=>S.partners.filter(p=>p.ok&&p.area==a.area).length;
+const load=p=>S.orders.filter(o=>o.partner==p.id&&['dropped','ironing','qc'].includes(o.status)).reduce((a,o)=>a+cnt(o),0);
+function toast(t){clearTimeout(tm);document.querySelector('.toast')?.remove();const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);tm=setTimeout(()=>d.remove(),2200)}
+function steps(o){const i=o.status=='flagged'?5:ST.indexOf(o.status);return '<div class="steps">'+ST.map((s,k)=>`<i class="${k<=i?'d':''}"></i>`).join('')+'</div>'}
+function pill(o){return `<span class="pill ${o.status=='flagged'?'e':''}">${LB[o.status]}</span>`}
+function R(){
+ $('roles').innerHTML=S.session?`<span class="mu" style="flex:1;align-self:center">${S.session=='admin'?'Admin':esc((me()||{}).name||'')}</span><button style="flex:0 0 auto" id="lo" onclick="appLogout()">Log out</button>`:'';
+ stamp();$('app').innerHTML=S.session?gate():login();
+ try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+}
+/* ---------- CUSTOMER ---------- */
+function cust(){
+ const tabs=[['apt','Nearby'],['book','Book'],['track','My orders']];
+ let h='<div class="tabs">'+tabs.map(t=>`<button class="${cs.tab==t[0]?'on':''}" onclick="cs.tab='${t[0]}';R()">${t[1]}</button>`).join('')+'</div>';
+ return h+({apt:cNear,book:cBook,track:cTrack}[cs.tab])();
+}
+function cApt(){
+ const a=cs.apt&&apt(cs.apt);
+ const list=S.apts.filter(x=>(x.name+x.area).toLowerCase().includes(cs.q.toLowerCase()));
+ let h=`<input placeholder="Search apartment or area in Bangalore" value="${esc(cs.q)}" oninput="cs.q=this.value;R();const i=document.querySelector('input');i.focus();i.setSelectionRange(99,99)">`;
+ h+=`<svg viewBox="0 0 360 220" width="100%" style="background:var(--acx);border-radius:12px;margin:8px 0"><path d="M0 110 Q120 90 180 120 T360 100M170 0 Q180 100 160 220" stroke="var(--bd)" stroke-width="8" fill="none"/>`+
+ S.apts.map(x=>{const n=partnersNear(x),on=x.id==cs.apt;return `<g onclick="cs.apt=${x.id};R()" style="cursor:pointer"><circle cx="${x.x}" cy="${x.y}" r="${on?16:13}" fill="${n?'var(--ac)':'var(--mu)'}"/><text x="${x.x}" y="${x.y+4}" text-anchor="middle" style="fill:#fff;font-weight:700;font-size:12px">${n}</text><text x="${x.x}" y="${x.y+28}" text-anchor="middle">${esc(x.name.split(' ')[0])}</text></g>`}).join('')+'</svg>';
+ h+='<div class="mu">Pins show ironing partners available near each apartment.</div><h2>Apartments</h2>';
+ h+=list.map(x=>`<div class="card row" onclick="cs.apt=${x.id};R()" style="cursor:pointer;${x.id==cs.apt?'border-color:var(--ac)':''}"><div><h3>${esc(x.name)}</h3><span class="mu">${x.area} · ${partnersNear(x)} partner(s) nearby</span></div>${x.id==cs.apt?'<span class="pill">Selected</span>':''}</div>`).join('')||'<div class="mu">No match.</div>';
+ h+=`<div class="card"><h3>Apartment not listed?</h3><input id="rn" placeholder="Apartment name"><input id="ra" placeholder="Area (e.g. HSR Layout)"><button class="btn g w" onclick="reqApt()">Request to add apartment</button></div>`;
+ if(S.reqs.length)h+=S.reqs.map(r=>`<div class="mu">Request: ${esc(r.name)} – <span class="pill w">${r.ok?'Approved':'Pending'}</span></div>`).join('');
+ if(a){h+=`<h2>Collection schedule · ${esc(a.name)}</h2><div class="cal">`+DAYS.map(d=>`<div class="${a.sch[d]?'on':''}">${d}<br>${a.sch[d]||'–'}</div>`).join('')+'</div><button class="btn w" style="margin-top:12px" onclick="cs.tab=\'book\';R()">Book a pickup</button>'}
+ return h;
+}
+function reqApt(){const n=$('rn').value.trim(),a=$('ra').value.trim();if(!n||!a)return toast('Enter name and area');S.reqs.push({name:n,area:a,ok:0});toast('Request sent to admin');R()}
+function cBook(){
+ const a=cs.apt&&apt(cs.apt);if(!a)return '<div class="card">Select an apartment first.</div>';
+ const tot=Object.entries(cs.cart).reduce((s,[k,q])=>s+q*S.price[k],0),n=Object.values(cs.cart).reduce((a,b)=>a+b,0);
+ const days=Object.keys(a.sch);
+ let h=`<div class="card"><h3>${esc(a.name)}</h3><span class="mu">Pickup slots: ${days.map(d=>d+' '+a.sch[d]).join(' · ')}</span><select id="slot">${days.map(d=>`<option>${d} ${a.sch[d]}</option>`).join('')}</select><input id="flat" placeholder="Flat number (e.g. B-402)" value="${esc(cs.flat)}" oninput="cs.flat=this.value"><input placeholder="Your name" value="${esc(cs.name)}" oninput="cs.name=this.value"><input placeholder="Phone" value="${esc(cs.phone)}" oninput="cs.phone=this.value"><div class="mu">Flat and contact details are visible only to authorised staff.</div></div>`;
+ h+='<div class="card">'+Object.keys(S.price).map(k=>`<div class="item"><div>${k}<div class="mu">₹${S.price[k]} each</div></div><div class="q"><button onclick="qty('${k}',-1)">−</button><b>${cs.cart[k]||0}</b><button onclick="qty('${k}',1)">+</button></div></div>`).join('')+`<div class="row" style="margin-top:10px"><b>${n} items</b><b>₹${tot}</b></div></div>`;
+ h+=`<div class="card"><h3>Pay</h3><select onchange="cs.pay=this.value">${['UPI','Card','Net banking'].map(p=>`<option ${p==cs.pay?'selected':''}>${p}</option>`).join('')}</select><div class="mu">Demo payment – no real charge.</div></div>`;
+ return h+`<button class="btn w" onclick="placeOrder(${tot})">Pay ₹${tot} &amp; confirm booking</button>`;
+}
+function qty(k,d){cs.cart[k]=Math.max(0,(cs.cart[k]||0)+d);R()}
+function placeOrder(t){
+ const items={};Object.entries(cs.cart).forEach(([k,q])=>q&&(items[k]=q));
+ if(!cs.flat.trim())return toast('Enter flat number');if(!t)return toast('Add some clothes');
+ if(!cs.name.trim()||!cs.phone.trim())return toast('Enter your name and phone');
+ const o={id:++S.n,apt:cs.apt,flat:cs.flat.trim(),name:cs.name.trim(),phone:cs.phone.trim(),slot:$('slot').value,items,total:t,status:'booked',uid:S.session,payout:null};lg(o,'Booking confirmed & paid ₹'+t);S.orders.push(o);
+ cs.cart={};cs.tab='track';toast('Booking confirmed');R()}
+function cTrack(){
+ const os=S.orders.filter(o=>o.uid==S.session).reverse();
+ return os.map(o=>`<div class="card"><div class="row"><h3>Order #${o.id}</h3>${pill(o)}</div><div class="mu">${esc(apt(o.apt).name)} · ${o.slot} · ${cnt(o)} items · ₹${o.total}</div>${miles(o)}${pkBox(o)}<div class="mu">${(o.log||[]).slice().reverse().map(l=>l[1]+' – '+esc(l[0])).join('<br>')}</div>${o.status=='booked'?`<button class="btn g sm" style="margin-top:8px" onclick="cancelO(${o.id})">Cancel booking</button>`:''}</div>`).join('')||'<div class="card mu">No orders yet.</div>';
+}
+/* ---------- STAFF ---------- */
+function staff(){
+ const by=s=>S.orders.filter(o=>s.includes(o.status)&&(!sf||o.apt==sf));
+ const card=(o,body)=>`<div class="card"><div class="row"><span class="lbl">${esc(code(o))}</span>${pill(o)}</div><div class="mu" style="margin:6px 0">${esc(apt(o.apt).name)} · Flat ${esc(o.flat)} · ${o.slot}${o.name?' · '+esc(o.name)+' '+esc(o.phone):''}<br>${Object.entries(o.items).map(([k,q])=>q+'× '+k).join(', ')} (${cnt(o)})</div>${body}</div>`;
+ let h=`<select onchange="sf=+this.value;R()"><option value="0">All apartments</option>${S.apts.map(a=>`<option value="${a.id}" ${a.id==sf?'selected':''}>${esc(a.name)}</option>`).join('')}</select><h2>Pickups</h2>`+(by(['booked']).map(o=>card(o,`<div class="row"><input class="s" id="c${o.id}" type="number" value="${cnt(o)}"><button class="btn sm" onclick="collect(${o.id})">Record &amp; label bundle</button></div>`)).join('')||'<div class="mu">No pickups pending.</div>');
+ h+='<h2>Quality check</h2>'+(by(['qc','flagged']).map(o=>card(o,(o.warn?`<div class="warn">⚠ ${esc(o.warn)}</div>`:'')+(o.flag?`<div class="warn">Flagged: ${esc(o.flag)}</div>`:'')+(o.status=='qc'?`<div class="row"><button class="btn sm" onclick="approve(${o.id})">${o.warn?'Approve anyway':'Approve'}</button><button class="btn sm r" onclick="flag(${o.id})">Flag issue</button></div>`:`<button class="btn sm g" onclick="rework(${o.id})">Send back to partner</button>`))).join('')||'<div class="mu">Nothing awaiting QC.</div>');
+ h+='<h2>Delivery</h2>'+(by(['approved']).map(o=>card(o,`<button class="btn sm" onclick="deliver(${o.id})">Mark delivered</button>`)).join('')||'<div class="mu">Nothing to deliver.</div>');
+ return h;
+}
+function pick(o){const a=apt(o.apt),n=cnt(o);const ok=S.partners.filter(p=>p.ok);return ok.find(p=>p.area==a.area&&p.cap-load(p)>=n)||ok.find(p=>p.cap-load(p)>=n)||ok[0]}
+function collect(id){const o=S.orders.find(x=>x.id==id),v=+$('c'+id).value;o.collected=v;o.status='collected';lg(o,'Collected & labelled '+code(o));o.partner=pick(o).id;if(v!=cnt(o))o.warn='Collected '+v+' vs booked '+cnt(o);toast('Labelled '+code(o));R()}
+function approve(id){const o=S.orders.find(x=>x.id==id);o.status='approved';lg(o,'Ironed & approved – ready for pickup');o.payout=Math.round(o.total*.7);o.paid=0;pr(o.partner).notes.push('Order '+code(o)+' approved – ₹'+o.payout+' payout queued');toast('Approved');R()}
+function flag(id){const o=S.orders.find(x=>x.id==id),r=prompt('Describe the issue');if(!r)return;o.flag=r;o.status='flagged';lg(o,'Quality issue found – being fixed');toast('Flagged');R()}
+function rework(id){const o=S.orders.find(x=>x.id==id);o.status='ironing';lg(o,'Re-ironing in progress');o.flag=null;o.warn=null;toast('Sent back');R()}
+function deliver(id){const o=S.orders.find(x=>x.id==id);o.status='delivered';lg(o,'Delivered to your door');toast('Delivered');R()}
+/* ---------- PARTNER ---------- */
+function partner(){
+ const p=pr(me().pid);pid=p.id;
+ const os=S.orders.filter(o=>o.partner==p.id),earn=os.filter(o=>o.payout);
+ let h=`<h2 style="margin-top:0">${esc(p.name)} <span class="pill">Verified</span></h2>`;
+ h+=`<div class="card"><div class="row"><div><h3>Daily capacity</h3><span class="mu">${esc(p.area)} · ${esc(p.av)} · in use ${load(p)}</span></div><input class="s" type="number" value="${p.cap}" onchange="pr(${p.id}).cap=+this.value;R()"></div></div>`;
+ if(p.notes.length)h+='<h2>Notifications</h2>'+p.notes.slice(-3).reverse().map(n=>`<div class="warn" style="background:var(--acx);color:var(--ac)">🔔 ${esc(n.text||n)}${n.tel?` · <a href="tel:${esc(n.tel)}">Call ${esc(n.who||'')}</a>`:''}</div>`).join('');
+ h+='<h2>Assigned bundles</h2>'+(os.slice().reverse().map(o=>{
+  let b='';
+  if(o.status=='dropped')b=`<div class="mu">Expected ${o.collected} · ${esc(ite(o))}</div>${pkBox(o,1)}<div class="row"><input class="s" id="r${o.id}" type="number" value="${o.collected}"><button class="btn sm" onclick="recv(${o.id})">Confirm received</button></div>`;
+  else if(o.status=='ironing')b=`<div class="mu">Received ${o.received}</div><div class="row"><input class="s" id="d${o.id}" type="number" value="${o.received}"><button class="btn sm" onclick="done(${o.id})">Submit for quality check</button></div>`;
+  else if(o.status=='flagged')b=`<div class="warn">Flagged by QC: ${esc(o.flag)}</div>`;
+  return `<div class="card"><div class="row"><span class="lbl">${esc(code(o))}</span>${pill(o)}</div><div class="mu" style="margin:6px 0">${esc(apt(o.apt).name)} · Flat ${esc(o.flat)} · ${o.collected} pcs</div>${b}</div>`}).join('')||'<div class="mu">No bundles assigned.</div>');
+ h+=`<h2>Earnings</h2><div class="card"><div class="row"><span>Pending payout</span><b>₹${earn.filter(o=>!o.paid).reduce((s,o)=>s+o.payout,0)}</b></div><div class="row"><span>Paid</span><b>₹${earn.filter(o=>o.paid).reduce((s,o)=>s+o.payout,0)}</b></div></div>`;
+ h+=''&&`<h2>Register as a new partner</h2><div class="card"><input id="pn" placeholder="Name"><input id="pa" placeholder="Service location / area"><input id="pc" type="number" placeholder="Daily capacity (clothes)"><input id="pv" placeholder="Availability (e.g. Mon–Sat, 9–6)"><button class="btn g w" onclick="regP()">Submit application</button></div>`;
+ return h;
+}
+function recv(id){const o=S.orders.find(x=>x.id==id);o.received=+$('r'+id).value;o.status='ironing';lg(o,'Received by '+pr(o.partner).name+' – ironing started');if(o.received!=o.collected)o.warn='Partner received '+o.received+' vs collected '+o.collected;R()}
+function done(id){const o=S.orders.find(x=>x.id==id),v=+$('d'+id).value;o.doneQty=v;if(v!=o.received)o.warn=(o.warn?o.warn+'; ':'')+'Ironed '+v+' vs received '+o.received;o.status='qc';lg(o,'Ironed – at quality check');ntP('Ironed, ready for quality check: '+code(o)+' at '+pr(o.partner).name,pr(o.partner).phone,pr(o.partner).name);toast('Submitted to QC');R()}
+function regP(){const n=$('pn').value.trim(),a=$('pa').value.trim();if(!n||!a)return toast('Enter name and area');S.partners.push({id:Date.now(),name:n,area:a,cap:+$('pc').value||30,av:$('pv').value||'TBD',ok:0,notes:[]});toast('Application sent');R()}
+/* ---------- ADMIN ---------- */
+function admin(){
+ const T=['Overview','Approvals','Setup','Pricing','Payouts'];
+ let h='<div class="tabs">'+T.map(t=>`<button class="${atab==t?'on':''}" onclick="atab='${t}';R()">${t}</button>`).join('')+'</div>';
+ if(atab=='Overview'){
+  h+=`<div class="row wrap">`+ST.concat('flagged').map(s=>`<div class="card" style="flex:1;min-width:90px;text-align:center"><b style="font-size:20px">${S.orders.filter(o=>o.status==s).length}</b><div class="mu">${LB[s]}</div></div>`).join('')+'</div>';
+  h+=S.orders.slice().reverse().map(o=>`<div class="card"><div class="row"><b>#${o.id} · ${esc(apt(o.apt).name)} · ${esc(o.flat)}</b>${pill(o)}</div><div class="mu">${cnt(o)} items · ₹${o.total}${o.partner?' · '+esc(pr(o.partner).name):''}</div>${o.warn?`<div class="warn">⚠ ${esc(o.warn)}</div>`:''}${steps(o)}${['dropped','ironing'].includes(o.status)?`<select onchange="reas(${o.id},this.value)">${S.partners.filter(p=>p.ok).map(p=>`<option value="${p.id}" ${p.id==o.partner?'selected':''}>${esc(p.name)}</option>`).join('')}</select>`:''}</div>`).join('')||'<div class="card mu">No bookings yet. Book one in the Customer view.</div>';
+  h+='<h2>Apartments &amp; schedules</h2>'+S.apts.map(a=>`<div class="card"><b>${esc(a.name)}</b> <span class="mu">${a.area}</span><div class="mu">${Object.keys(a.sch).map(d=>d+' '+a.sch[d]).join(' · ')}</div></div>`).join('');
+ }
+ if(atab=='Approvals'){
+  const pr1=S.reqs.filter(r=>!r.ok),pp=S.partners.filter(p=>!p.ok);
+  h+='<h3>Apartment requests</h3>'+(pr1.map(r=>`<div class="card row"><div><b>${esc(r.name)}</b><div class="mu">${esc(r.area)} · ${esc(r.addr||'')}</div></div><button class="btn sm" onclick="apApt(${S.reqs.indexOf(r)})">Approve</button></div>`).join('')||'<div class="mu">None pending.</div>');
+  h+=pickAppr();void(pp.map(p=>`<div class="card row"><div><b>${esc(p.name)}</b><div class="mu">${esc(p.area)} · ${p.cap}/day · ${esc(p.av)}</div></div><button class="btn sm" onclick="pr(${p.id}).ok=1;R()">Approve</button></div>`).join('')||'<div class="mu">None pending.</div>');
+ }
+ if(atab=='Setup'){
+  h+=`<div class="card"><h3>Add apartment</h3><input id="sn" placeholder="Name"><input id="sa" placeholder="Area"><button class="btn w" onclick="addApt()">Add apartment</button></div>`;
+  h+=S.apts.map(a=>`<div class="card"><b>${esc(a.name)}</b> <span class="mu">${esc(a.area)}</span><div class="mu">Pickup timing per day (blank = no pickup)</div>${DAYS.map(d=>`<div class="row"><span>${d}</span><input style="width:150px" value="${esc(a.sch[d]||'')}" placeholder="e.g. 7–9 AM" onchange="setSch(${a.id},'${d}',this.value)"></div>`).join('')}<button class="btn g sm" style="margin-top:6px" onclick="delApt(${a.id})">Remove</button></div>`).join('');
+  h+='<h2>Active partners</h2>'+S.partners.filter(p=>p.ok).map(p=>`<div class="card row"><div><b>${esc(p.name)}</b><div class="mu">${esc(p.area)} · ${p.cap}/day</div><div class="mu">${mapA(p)}</div></div><button class="btn g sm" onclick="pr(${p.id}).ok=0;R()">Deactivate</button></div>`).join('');
+  h+='<button class="btn g w" style="margin-top:12px" onclick="resetD()">Reset demo data</button>';
+ }
+ if(atab=='Pricing')h+=Object.keys(S.price).map(k=>`<div class="card row"><b>${k}</b><div>₹ <input class="s" type="number" value="${S.price[k]}" onchange="S.price['${k}']=+this.value;toast('Price updated')"></div></div>`).join('');
+ if(atab=='Payouts'){
+  const L=S.orders.filter(o=>o.payout);
+  h+=L.map(o=>`<div class="card row"><div><b>${esc(pr(o.partner).name)}</b><div class="mu">${esc(code(o))} · ₹${o.payout}</div></div>${o.paid?'<span class="pill">Paid</span>':`<button class="btn sm" onclick="S.orders.find(x=>x.id==${o.id}).paid=1;toast('Payout released');R()">Release ₹${o.payout}</button>`}</div>`).join('')||'<div class="card mu">Payouts appear here once QC approves an order.</div>';
+ }
+ return h;
+}
+function apApt(i){const r=S.reqs[i];r.ok=1;const nid=Date.now();(S.users.find(u=>u.id==r.uid)||{}).apt=nid;S.apts.push({id:nid,addr:r.addr,name:r.name,area:r.area,x:40+Math.random()*280,y:40+Math.random()*140,sch:{Tue:'7–9 AM',Sat:'8–10 AM'}});toast('Apartment added with default schedule');R()}
+function lg(o,t){(o.log=o.log||[]).push([t,new Date().toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})])}
+function cancelO(id){S.orders=S.orders.filter(o=>o.id!=id);toast('Booking cancelled, refund initiated (demo)');R()}
+function reas(id,v){const o=S.orders.find(x=>x.id==id);o.partner=+v;lg(o,'Moved to '+pr(+v).name);toast('Reassigned');R()}
+function addApt(){const n=$('sn').value.trim(),a=$('sa').value.trim();if(!n||!a)return toast('Enter name and area');S.apts.push({id:Date.now(),name:n,area:a,x:40+Math.random()*280,y:40+Math.random()*140,sch:{}});toast('Apartment added – set its pickup days');R()}
+function setSch(id,d,v){const a=apt(id);v=v.trim();if(v)a.sch[d]=v;else delete a.sch[d];R()}
+function delApt(id){if(S.orders.some(o=>o.apt==id&&o.status!='delivered'))return toast('Apartment has active orders');S.apts=S.apts.filter(a=>a.id!=id);if(cs.apt==id)cs.apt=null;R()}
+function resetD(){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}
+let st='today',lab=0;
+const cnL=(l,v,bad)=>`<div style="text-align:center;flex:1"><b style="${bad?'color:var(--er)':''}">${v==null?'–':v}</b><div class="mu">${l}</div></div>`;
+function staff2(){
+ const td=DAYS[(new Date().getDay()+6)%7],B=s=>S.orders.filter(o=>s.includes(o.status)),F=a=>a.filter(o=>!sf||o.apt==sf);
+ const n1=B(['booked']).length,n2=B(['qc','flagged']).length,n3=B(['approved','out']).length;
+ const hd=o=>`<div class="row"><span class="lbl">${esc(code(o))}</span>${pill(o)}</div><div class="mu" style="margin:6px 0"><b>${esc(apt(o.apt).name)} · Flat ${esc(o.flat)}</b><br>${o.name?esc(o.name)+' · <a href="tel:'+esc(o.phone)+'">'+esc(o.phone)+'</a> · ':''}${o.slot}</div>`;
+ const its=o=>Object.entries(o.coll||o.items).map(([k,q])=>q+'× '+k).join(', ');
+ const sel=`<select onchange="sf=+this.value;R()"><option value="0">All apartments</option>${S.apts.map(a=>`<option value="${a.id}" ${a.id==sf?'selected':''}>${esc(a.name)}</option>`).join('')}</select>`;
+ let h='';
+ if(st=='today'){
+  h+=`<h2 style="margin-top:0">Today · ${td}</h2><div class="row" style="gap:8px">${[['To collect',n1],['At QC',n2],['To deliver',n3]].map(x=>`<div class="card" style="flex:1;text-align:center;margin:0"><b style="font-size:22px">${x[1]}</b><div class="mu">${x[0]}</div></div>`).join('')}</div><h2>Assigned apartments</h2>`;
+  h+=S.apts.map(a=>{const sl=a.sch[td],bk=B(['booked']).filter(o=>o.apt==a.id).length;if(!sl&&!bk)return '';return `<div class="card" onclick="sf=${a.id};st='pick';window.scrollTo(0,0);R()"><div class="row"><h3>${esc(a.name)}</h3><span class="pill ${sl?'':'w'}">${sl?sl:'No slot today'}</span></div><div class="mu">${esc(a.area)} · ${bk} pickup(s) pending<br>Week: ${DAYS.filter(d=>a.sch[d]).map(d=>d+' '+a.sch[d]).join(' · ')||'no days set'}</div></div>`}).join('')||'<div class="mu">No pickups scheduled today.</div>';
+ }
+ if(st=='pick'){
+  h+=sel+'<h2>Pickups to collect</h2>'+(F(B(['booked'])).map(o=>`<div class="card">${hd(o)}<div class="mu">Record what you actually collect:</div>${Object.keys(o.items).map((k,i)=>`<div class="item"><span>${esc(k)} <span class="mu">booked ${o.items[k]}</span></span><input class="s" id="c${o.id}_${i}" type="number" inputmode="numeric" min="0" value="${o.items[k]}"></div>`).join('')}<button class="btn w" style="margin-top:10px" onclick="collect2(${o.id})">Record &amp; label bundle</button></div>`).join('')||'<div class="mu">No pickups pending.</div>');
+ }
+ if(st=='qc'){
+  h+=sel+'<h2>Quality check</h2>'+(F(B(['qc','flagged'])).map(o=>{
+   const act=o.status=='qc'?`<div class="card" style="margin:8px 0;padding:4px 12px">${['Creases removed','No stains or burns','Folded, count matches'].map((t,i)=>`<label class="item"><span>${t}</span><input type="checkbox" id="k${o.id}_${i}"></label>`).join('')}</div><button class="btn w" onclick="qcOk(${o.id})">${o.warn?'Approve anyway':'Approve order'}</button><div class="row" style="margin-top:8px"><select id="fr${o.id}" style="margin:0">${['Missing item','Poor ironing','Stain or burn','Wrong count','Other'].map(r=>`<option>${r}</option>`).join('')}</select><button class="btn r sm" onclick="flag2(${o.id})">Flag</button></div>`:`<div class="warn">Flagged: ${esc(o.flag)}</div><button class="btn g w" onclick="rework(${o.id})">Send back to partner</button>`;
+   return `<div class="card">${hd(o)}<div class="mu">${esc(its(o))}${o.partner?' · '+esc(pr(o.partner).name):''}</div><div class="row" style="margin:8px 0">${cnL('Booked',cnt(o))}${cnL('Collected',o.collected,o.collected!=cnt(o))}${cnL('Received',o.received,o.received!=o.collected)}${cnL('Ironed',o.doneQty,o.doneQty!=o.received)}</div>${o.warn?`<div class="warn">⚠ ${esc(o.warn)}</div>`:''}${act}<button class="btn g sm" style="margin-top:8px" onclick="lab=${o.id};R()">View label</button></div>`}).join('')||'<div class="mu">Nothing awaiting quality check.</div>');
+ }
+ if(st=='del'){
+  h+=sel+'<h2>Delivery</h2>'+(F(B(['approved','out'])).map(o=>`<div class="card">${hd(o)}<div class="mu">${esc(its(o))}</div>${o.status=='approved'?`<button class="btn w" style="margin-top:8px" onclick="startDel(${o.id})">Start delivery</button>`:`<button class="btn w" style="margin-top:8px" onclick="deliver(${o.id})">Mark delivered</button>`}</div>`).join('')||'<div class="mu">Nothing to deliver.</div>');
+ }
+ const lo=lab&&S.orders.find(x=>x.id==lab);
+ const sheet=lo?`<div class="ov" onclick="lab=0;R()"><div class="sh" onclick="event.stopPropagation()"><div class="lc"><div class="lbl" style="font-size:20px">${esc(code(lo))}</div><h3 style="margin-top:8px">${esc(apt(lo.apt).name)}</h3><div style="font-size:22px;font-weight:700">Flat ${esc(lo.flat)}</div><div class="mu">${esc(its(lo))}</div><div>${lo.collected||cnt(lo)} pcs</div></div><div class="mu" style="margin-bottom:10px">Write this code on the bundle tag.</div><button class="btn w" onclick="lab=0;R()">Done</button></div></div>`:'';
+ const nav=`<nav class="bn">${[['today','Today',0],['pick','Pickups',n1],['qc','Quality',n2],['del','Delivery',n3]].map(t=>`<button class="${st==t[0]?'on':''}" onclick="st='${t[0]}';window.scrollTo(0,0);R()">${t[1]}${t[2]?' <span class="pill w">'+t[2]+'</span>':''}</button>`).join('')}</nav><div style="height:70px"></div>`;
+ return h+sheet+nav;
+}
+function collect2(id){const o=S.orders.find(x=>x.id==id),c={};let t=0,d=[];Object.keys(o.items).forEach((k,i)=>{const v=+$('c'+id+'_'+i).value||0;c[k]=v;t+=v;if(v!=o.items[k])d.push(k+' '+v+'/'+o.items[k])});o.coll=c;o.collected=t;if(d.length)o.warn='Collected differs from booking: '+d.join(', ');o.status='collected';lg(o,'Collected & labelled '+code(o));lab=0;toast('Bundle labelled '+code(o)+' – write it on the tag');R()}
+function qcOk(id){if(![0,1,2].every(i=>$('k'+id+'_'+i).checked))return toast('Tick every checklist item or flag an issue');approve(id)}
+function flag2(id){const o=S.orders.find(x=>x.id==id);o.flag=$('fr'+id).value;o.status='flagged';lg(o,'Quality issue found – being fixed');toast('Flagged');R()}
+function startDel(id){const o=S.orders.find(x=>x.id==id);o.status='out';lg(o,'Out for delivery');toast('Marked out for delivery');R()}
+let au={step:'pick',type:'',mode:'up',f:{}};
+const me=()=>S.users.find(u=>u.id==S.session);
+const TYPES={customer:['I have clothes to iron','Book ironing for your apartment','👕'],ironman:['Iron man','Shop owner – iron clothes for apartments','🧺'],pickup:['Pickup boy','Collect, label, check and deliver','🛵']};
+const fld=(k,ph,t)=>`<input type="${t||'text'}" placeholder="${ph}" value="${esc(au.f[k]||'')}" oninput="au.f['${k}']=this.value">`;
+const fil=(k,l)=>`<div class="mu" style="margin-top:6px">${l}</div><input type="file" accept="image/*,.pdf" onchange="au.f['${k}']=this.files[0]?this.files[0].name:''">`;
+const idSel=()=>`<select onchange="au.f.idt=this.value">${['Aadhaar card','PAN card','Voter ID','Passport'].map(x=>`<option ${au.f.idt==x?'selected':''}>${x}</option>`).join('')}</select>`;
+function appLogout(){S.session=null;au={step:'pick',type:'',mode:'up',f:{}};cs.tab='apt';cs.cart={};cs.apt=null;cs.flat='';cs.name='';cs.phone='';cs.q='';sa=0;st='apt';lab=0;sf=0;atab='Overview';window.scrollTo(0,0);R();toast('Logged out')}
+window.logout=appLogout;
+function adminIn(){S.session='admin';R()}
+function waitBox(a,b){return `<div class="card" style="text-align:center"><h3>⏳ ${a}</h3><p class="mu">${b}</p><button class="btn g" onclick="R()">Refresh status</button></div>`}
+function login(){
+ let h='<div style="max-width:440px;margin:0 auto">';
+ if(au.step=='pick')h+='<h2 style="margin-top:0;font-size:20px">Welcome to PressUp</h2><div class="mu" style="margin-bottom:10px">Who are you?</div>'+Object.entries(TYPES).map(([k,v])=>`<div class="card row" style="cursor:pointer" onclick="au={step:'form',type:'${k}',mode:'up',f:{}};R()"><div><h3>${v[2]} ${v[0]}</h3><span class="mu">${v[1]}</span></div><span>›</span></div>`).join('')+'<button class="btn g w" onclick="adminIn()">Admin (demo)</button>'+demoBox();
+ else{
+  const t=au.type;
+  h+=`<button class="btn g sm" onclick="au.step='pick';R()">‹ Back</button><h2>${TYPES[t][2]} ${TYPES[t][0]}</h2>`;
+  if(au.step=='form'){
+   h+=`<div class="tabs"><button class="${au.mode=='up'?'on':''}" onclick="au.mode='up';R()">Sign up</button><button class="${au.mode=='in'?'on':''}" onclick="au.mode='in';R()">Log in</button></div>`;
+   if(au.mode=='in')h+=fld('phone','Mobile number','tel')+'<button class="btn w" onclick="sendOtp()">Send OTP</button>';
+   else{
+    if(t=='customer')h+=fld('name','Full name')+fld('phone','Mobile number (10 digits)','tel')+fld('email','Email ID','email')+`<select onchange="au.f.apt=this.value;R()"><option value="">Select your apartment</option>${S.apts.map(a=>`<option value="${a.id}" ${au.f.apt==a.id?'selected':''}>${esc(a.name)} – ${esc(a.area)}</option>`).join('')}<option value="new" ${au.f.apt=='new'?'selected':''}>My apartment is not listed</option></select>`+(au.f.apt=='new'?'<div class="warn">Register your apartment. Admin will verify it before you can book.</div>'+fld('aname','Apartment name')+fld('aarea','Area / locality')+fld('aaddr','Address or landmark to identify the apartment'):'')+fld('flat','Flat number (e.g. B-402)');
+    if(t=='ironman')h+=fld('name','Shop owner name')+fld('phone','Mobile number (10 digits)','tel')+fld('email','Email ID','email')+fld('shop','Shop name')+fld('addr','Shop address')+fld('area','Area / locality')+idSel()+fil('idf','ID card upload')+fil('cert','Shop certification (trade licence / GST / Udyam)')+fld('cap','Daily ironing capacity (clothes)','number')+fld('av','Availability (e.g. Mon–Sat, 9–6)');
+    if(t=='pickup')h+=fld('name','Full name')+fld('phone','Mobile number (10 digits)','tel')+fld('email','Email ID','email')+fld('addr','Home address')+idSel()+fil('idf','ID card upload')+fld('veh','Vehicle type and registration number')+fld('lic','Driving licence number')+fil('licf','Licence photo')+photoIn();
+    h+=`<button class="btn w" style="margin-top:10px" onclick="sendOtp()">${t=='customer'?'Send OTP':'Submit for verification'}</button>`;
+   }
+  }else h+=`<div class="card">Enter the OTP for ${esc(au.f.phone)}<div class="warn">Demo: no SMS is sent. Your OTP is <b>${au.otp}</b></div><input id="otp" inputmode="numeric" placeholder="4-digit OTP"><button class="btn w" onclick="verify()">Verify</button></div>`;
+ }
+ return h+'</div>';
+}
+function sendOtp(){
+ const f=au.f,t=au.type,ex=S.users.find(u=>u.phone==f.phone&&u.type==t);
+ if(!/^\d{10}$/.test(f.phone||''))return toast('Enter a valid 10-digit mobile number');
+ if(au.mode=='in'){if(!ex)return toast('No account found. Please sign up.')}
+ else{
+  if(ex)return toast('Already registered. Please log in.');
+  const need={customer:['name','email','apt','flat'].concat(f.apt=='new'?['aname','aarea','aaddr']:[]),ironman:['name','email','shop','addr','area','idf','cert'],pickup:['name','email','addr','idf','veh','lic','licf','photoData']}[t];
+  if(need.some(k=>!(f[k]||'').trim()))return toast('Please fill in all fields and uploads');
+  if(!/@/.test(f.email))return toast('Enter a valid email');
+ }
+ au.otp=String(1000+Math.floor(Math.random()*9000));au.step='otp';R()
+}
+function verify(){
+ if($('otp').value.trim()!=au.otp)return toast('Wrong OTP');
+ const f=au.f,t=au.type,idt=f.idt||'Aadhaar card';let u;
+ if(au.mode=='in')u=S.users.find(x=>x.phone==f.phone&&x.type==t);
+ else{
+  u={id:Date.now(),type:t,name:f.name,phone:f.phone,email:f.email,status:'pending'};
+  if(t=='customer'){u.flat=f.flat.trim();u.status='approved';if(f.apt=='new')S.reqs.push({name:f.aname,area:f.aarea,addr:f.aaddr,ok:0,uid:u.id});else u.apt=+f.apt}
+  if(t=='ironman'){const p={id:Date.now()+1,phone:f.phone,name:f.shop,owner:f.name,addr:f.addr,area:f.area,cap:+f.cap||40,av:f.av||'TBD',ok:0,notes:[],docs:{id:idt+' – '+f.idf,cert:f.cert}};S.partners.push(p);u.pid=p.id}
+  if(t=='pickup')u.docs={addr:f.addr,id:idt+' – '+f.idf,veh:f.veh,lic:f.lic+' – '+f.licf,photo:f.photoData};
+  S.users.push(u);
+ }
+ S.session=u.id;au={step:'pick',type:'',mode:'up',f:{}};cs.apt=null;cs.flat='';cs.name='';window.scrollTo(0,0);R()
+}
+function gate(){
+ if(S.session=='admin')return admin();
+ const u=me();if(!u){S.session=null;return login()}
+ if(u.type=='customer'){
+  if(!u.apt||!apt(u.apt))return waitBox('Apartment under review','Admin is verifying your apartment. Booking opens once it is approved.');
+  cs.apt=u.apt;if(!cs.flat)cs.flat=u.flat;if(!cs.name){cs.name=u.name;cs.phone=u.phone}
+  return cust();
+ }
+ if(u.type=='ironman'){const p=pr(u.pid);return !p?waitBox('Application rejected','Please contact support.'):p.ok?partner():waitBox('Verification in progress','Admin is reviewing your shop documents. You can use the app once approved.')}
+ return u.status=='approved'?staff3():waitBox(u.status=='rejected'?'Application rejected':'Verification in progress','Admin is reviewing your ID, licence, vehicle details and photo.');
+}
+function cNear(){
+ const a=apt(cs.apt),ps=S.partners.filter(p=>p.ok),near=ps.filter(p=>p.area==a.area),rest=ps.filter(p=>p.area!=a.area),px=p=>{const i=ps.indexOf(p);return [45+(i%4)*88,32+(Math.floor(i/4)%3)*62+(i%2)*20]};
+ let h=`<div class="row"><h3>${esc(a.name)}</h3><span class="pill">${near.length} iron man nearby</span></div><svg viewBox="0 0 360 220" width="100%" style="background:var(--acx);border-radius:12px;margin:8px 0"><path d="M0 110 Q120 90 180 120 T360 100M170 0 Q180 100 160 220" stroke="var(--bd)" stroke-width="8" fill="none"/>`+ps.map(p=>{const q=px(p),n=p.area==a.area;return `<g onclick="cs.sp=${p.id};R()" style="cursor:pointer"><circle cx="${q[0]}" cy="${q[1]}" r="${cs.sp==p.id?14:11}" fill="${n?'var(--ac)':'var(--mu)'}"/><text x="${q[0]}" y="${q[1]+4}" text-anchor="middle" style="font-size:12px">🧺</text><text x="${q[0]}" y="${q[1]+24}" text-anchor="middle">${esc(p.name.split(' ')[0])}</text></g>`}).join('')+`<rect x="${a.x-10}" y="${a.y-10}" width="20" height="20" rx="5" fill="var(--wn)"/><text x="${a.x}" y="${a.y+24}" text-anchor="middle">You</text></svg><div class="mu">Schematic map. Tap a pin to see the shop. Green = iron man in your area, grey = further away.</div>`;
+ h+=near.concat(rest).filter(p=>p.id==cs.sp).map(p=>`<div class="card"><div class="row"><h3>🧺 ${esc(p.name)}</h3><span class="pill ${p.area==a.area?'':'w'}">${p.area==a.area?'Near you':esc(p.area)}</span></div><div class="mu">${esc(p.addr||p.area)} · Verified<br><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((p.addr||p.name+' '+p.area)+' Bangalore')}">Open in Google Maps</a></div></div>`).join('');
+ h+=`<h2>Pickup schedule</h2><div class="cal">`+DAYS.map(d=>`<div class="${a.sch[d]?'on':''}">${d}<br>${a.sch[d]||'–'}</div>`).join('')+`</div><button class="btn w" style="margin-top:12px" onclick="cs.tab='book';R()">Book a pickup</button>`;
+ return h;
+}
+function pickAppr(){
+ const pp=S.partners.filter(p=>!p.ok),pk=S.users.filter(u=>u.type=='pickup'&&u.status=='pending');
+ return '<h2>Iron man (shop) applications</h2>'+(pp.map(p=>`<div class="card"><b>${esc(p.name)}</b> <span class="mu">owner ${esc(p.owner||'')}</span><div class="mu">${esc(p.addr||'')} · ${esc(p.area)} · ${p.cap}/day<br>ID: ${esc(p.docs?p.docs.id:'–')}<br>Certificate: ${esc(p.docs?p.docs.cert:'–')}</div><div class="mu">${mapA(p)}</div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="pr(${p.id}).ok=1;R()">Verify &amp; approve</button><button class="btn g sm" onclick="S.partners=S.partners.filter(x=>x.id!=${p.id});R()">Reject</button></div></div>`).join('')||'<div class="mu">None pending.</div>')+'<h2>Pickup boy applications</h2>'+(pk.map(u=>`<div class="card"><b>${esc(u.name)}</b><div class="mu">${esc(u.docs.addr)}<br>ID: ${esc(u.docs.id)}<br>Vehicle: ${esc(u.docs.veh)}<br>Licence: ${esc(u.docs.lic)}<br>Photo: ${esc(u.docs.photo?'uploaded':'–')}</div>${u.docs.photo?`<img class="av" src="${u.docs.photo}" alt="">`:''}<div class="row" style="margin-top:8px"><button class="btn sm" onclick="S.users.find(x=>x.id==${u.id}).status='approved';R()">Verify &amp; approve</button><button class="btn g sm" onclick="S.users.find(x=>x.id==${u.id}).status='rejected';R()">Reject</button></div></div>`).join('')||'<div class="mu">None pending.</div>');
+}
+let sa=0;
+const nowS=()=>new Date().toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});
+function stamp(){S.orders.forEach(o=>{o.ts=o.ts||{};if(!o.ts[o.status])o.ts[o.status]=nowS()})}
+const ite=o=>Object.entries(o.coll||o.items).map(([k,q])=>q+'× '+k).join(', ');
+const gm=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q+' Bangalore');
+const mapA=(x,l)=>`<a target="_blank" rel="noopener" href="${gm(x.addr||(x.name+' '+x.area))}">${l||'📍 Open in Maps'}</a>`;
+function ntP(t,tel,who){(S.pn=S.pn||[]).push({text:t,tel:tel,who:who,ts:nowS()})}
+function ntI(p,t,tel,who){p.notes.push({text:t,tel:tel,who:who})}
+function pkBox(o,c){const u=S.users.find(x=>x.id==o.picker);if(!u)return '';return `<div class="row" style="justify-content:flex-start;margin:8px 0">${u.docs&&u.docs.photo?`<img class="av" src="${u.docs.photo}" alt="">`:''}<div><b>${esc(u.name)}</b><div class="mu">${c?'Pickup person':'Your pickup &amp; delivery person'} · <a href="tel:${esc(u.phone)}">Call ${esc(u.phone)}</a></div></div></div>`}
+const MS=['Booked','Pickup accepted','Collected','Dropped to iron man','Picked up from iron man','Delivered'],MK=['booked','accepted','collected','dropped','pickedup','delivered'],MI={booked:0,accepted:1,collected:2,dropped:3,ironing:3,qc:3,flagged:3,approved:3,pickedup:4,out:4,delivered:5};
+function miles(o){const c=MI[o.status],sub={dropped:'Waiting for iron man',ironing:'Being ironed',qc:'Quality check',flagged:'Re-check needed',approved:'Ironed, ready for pickup'}[o.status];
+ return '<div style="margin:8px 0">'+MS.map((m,i)=>{const d=i<c||o.status=='delivered',cu=i==c&&!d;return `<div class="ms ${d?'d':cu?'c':''}"><b>${d?'✓':i+1}</b><div>${m}${cu&&sub?` <span class="pill w">${sub}</span>`:''}<div class="mu">${(d||cu)&&o.ts&&o.ts[MK[i]]?o.ts[MK[i]]:''}</div></div></div>`}).join('')+'</div>'}
+function pic(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=160;const s=Math.min(im.width,im.height);c.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,160,160);au.f.photoData=c.toDataURL('image/jpeg',.7);R()};im.src=r.result};r.readAsDataURL(f)}
+const photoIn=()=>`<div class="mu" style="margin-top:6px">Your photo (take a selfie or upload one)</div><div class="row" style="justify-content:flex-start">${au.f.photoData?`<img class="av" src="${au.f.photoData}" alt="">`:''}<input type="file" accept="image/*" onchange="pic(this)"></div>`;
+function staff3(){
+ if(!['apt','drop','ret','del'].includes(st))st='apt';
+ const B=s=>S.orders.filter(o=>s.includes(o.status)),W=['booked','accepted'],td=DAYS[(new Date().getDay()+6)%7];
+ const n1=B(W).length,n2=B(['collected']).filter(o=>o.picker==S.session).length,n3=B(['qc','flagged','approved']).length,n4=B(['pickedup']).length;
+ const cu=o=>(o.name?esc(o.name)+' · <a href="tel:'+esc(o.phone)+'">Call customer</a>':'Customer');
+ const hd=o=>`<div class="row"><span class="lbl">${esc(code(o))}</span>${pill(o)}</div>`;
+ const none=t=>`<div class="mu">${t}</div>`;
+ let h='';
+ if(st=='apt'){
+  (S.pn||[]).slice(-3).reverse().forEach(n=>h+=`<div class="warn" style="background:var(--acx);color:var(--ac)">🔔 ${esc(n.text)}${n.tel?` · <a href="tel:${esc(n.tel)}">Call ${esc(n.who||'')}</a>`:''}</div>`);
+  if(!sa||!apt(sa)){
+   h+='<h2 style="margin-top:0">Apartments · '+td+'</h2>'+(S.apts.map(a=>{const sl=a.sch[td],bk=B(W).filter(o=>o.apt==a.id).length;if(!sl&&!bk)return '';return `<div class="card" style="cursor:pointer" onclick="sa=${a.id};window.scrollTo(0,0);R()"><div class="row"><h3>${esc(a.name)}</h3><span class="pill ${sl?'':'w'}">${sl||'No slot today'}</span></div><div class="mu">${esc(a.area)} · ${bk} flat(s) to collect<br>Week: ${DAYS.filter(d=>a.sch[d]).map(d=>d+' '+a.sch[d]).join(' · ')||'no days set'}</div></div>`}).join('')||none('No pickups scheduled.'));
+  }else{
+   const a=apt(sa);
+   h+=`<button class="btn g sm" onclick="sa=0;R()">‹ Apartments</button><h2>${esc(a.name)}</h2><div class="mu">${esc(a.area)} · ${mapA(a,'📍 Open apartment in Maps')}</div><h2>Flats with bookings</h2>`;
+   h+=B(W).filter(o=>o.apt==sa).sort((x,y)=>(''+x.flat).localeCompare(y.flat)).map(o=>`<div class="card">${hd(o)}<div class="mu" style="margin:6px 0"><b>Flat ${esc(o.flat)}</b> · ${cu(o)} · ${o.slot}</div>`+(o.status=='booked'?`<div class="mu">${esc(ite(o))}</div><button class="btn w" style="margin-top:8px" onclick="accept(${o.id})">Accept pickup</button>`:o.picker==S.session?`<div class="mu">Collection form – enter what you actually collect:</div>${Object.keys(o.items).map((k,i)=>`<div class="item"><span>${esc(k)} <span class="mu">booked ${o.items[k]}</span></span><input class="s" id="c${o.id}_${i}" type="number" inputmode="numeric" min="0" value="${o.items[k]}"></div>`).join('')}<button class="btn w" style="margin-top:10px" onclick="collect2(${o.id})">Mark pickup completed</button>`:none('Accepted by another pickup person'))+'</div>').join('')||none('No bookings for this apartment.');
+   const col=B(['collected']).filter(o=>o.apt==sa&&o.picker==S.session);if(col.length)h+=dropPanel(col,!B(W).some(o=>o.apt==sa));
+  }
+ }
+ if(st=='drop'){
+  const mine=B(['collected']).filter(o=>o.picker==S.session);
+  h+='<h2 style="margin-top:0">Iron drop</h2>'+(mine.length?mine.map(o=>`<label class="card row" style="cursor:pointer"><div><span class="lbl">${esc(code(o))}</span><div class="mu">${esc(apt(o.apt).name)} · Flat ${esc(o.flat)} · ${o.collected} pcs<br>${esc(ite(o))}</div></div><input type="checkbox" id="dk${o.id}" checked></label>`).join('')+`<div class="card"><h3>Select iron man</h3><select id="dp">${S.partners.filter(p=>p.ok).map(p=>`<option value="${p.id}">${esc(p.name)} · ${esc(p.area)} · free ${p.cap-load(p)}</option>`).join('')}</select><button class="btn w" style="margin-top:8px" onclick="dropLot()">Drop to iron man</button></div>`:none('No collected bundles waiting to be dropped.'));
+  const dr=B(['dropped','ironing','qc','flagged','approved']).filter(o=>o.picker==S.session);
+  h+='<h2>With iron men</h2>'+(S.partners.filter(p=>dr.some(o=>o.partner==p.id)).map(p=>`<div class="card"><b>${esc(p.name)}</b><div class="mu">${mapA(p)}${p.phone?` · <a href="tel:${esc(p.phone)}">Call</a>`:''}</div>${dr.filter(o=>o.partner==p.id).map(o=>`<div class="item"><span>${esc(apt(o.apt).name)} · Flat ${esc(o.flat)}</span>${pill(o)}</div>`).join('')}</div>`).join('')||none('Nothing dropped yet.'));
+ }
+ if(st=='ret'){
+  h+='<h2 style="margin-top:0">Quality check at iron man</h2>'+(B(['qc','flagged']).map(o=>{
+   const p=pr(o.partner)||{};
+   const act=o.status=='qc'?`<div class="card" style="margin:8px 0;padding:4px 12px">${['Creases removed','No stains or burns','Folded, count matches'].map((t,i)=>`<label class="item"><span>${t}</span><input type="checkbox" id="k${o.id}_${i}"></label>`).join('')}</div><button class="btn w" onclick="qcOk(${o.id})">${o.warn?'Approve anyway':'Approve order'}</button><div class="row" style="margin-top:8px"><select id="fr${o.id}" style="margin:0">${['Missing item','Poor ironing','Stain or burn','Wrong count','Other'].map(r=>`<option>${r}</option>`).join('')}</select><button class="btn r sm" onclick="flag2(${o.id})">Flag</button></div>`:`<div class="warn">Flagged: ${esc(o.flag)}</div><button class="btn g w" onclick="rework(${o.id})">Send back to iron man</button>`;
+   return `<div class="card">${hd(o)}<div class="mu" style="margin:6px 0">${esc(apt(o.apt).name)} · Flat ${esc(o.flat)}<br>${esc(ite(o))}<br>${esc(p.name||'')} · ${mapA(p)}${p.phone?` · <a href="tel:${esc(p.phone)}">Call</a>`:''}</div><div class="row" style="margin:8px 0">${cnL('Booked',cnt(o))}${cnL('Collected',o.collected,o.collected!=cnt(o))}${cnL('Received',o.received,o.received!=o.collected)}${cnL('Ironed',o.doneQty,o.doneQty!=o.received)}</div>${o.warn?`<div class="warn">⚠ ${esc(o.warn)}</div>`:''}${act}</div>`}).join('')||none('Nothing awaiting quality check.'));
+  h+='<h2>Pick up from iron man</h2>'+(B(['approved']).map(o=>{const p=pr(o.partner)||{};return `<div class="card">${hd(o)}<div class="mu" style="margin:6px 0">${esc(apt(o.apt).name)} · Flat ${esc(o.flat)}<br>${esc(p.name||'')} · ${mapA(p)}${p.phone?` · <a href="tel:${esc(p.phone)}">Call</a>`:''}</div><button class="btn w" onclick="pickRet(${o.id})">Picked up from iron man</button></div>`}).join('')||none('Nothing ready for pickup.'));
+ }
+ if(st=='del'){
+  h+='<h2 style="margin-top:0">Deliver to flats</h2>'+(B(['pickedup']).sort((x,y)=>x.apt-y.apt).map(o=>`<div class="card">${hd(o)}<div class="mu" style="margin:6px 0"><b>${esc(apt(o.apt).name)} · Flat ${esc(o.flat)}</b><br>${cu(o)}<br>${mapA(apt(o.apt),'📍 Open apartment in Maps')}</div><button class="btn w" onclick="deliver(${o.id})">Mark delivered</button></div>`).join('')||none('Nothing to deliver.'));
+ }
+ const nav=`<nav class="bn">${[['apt','Pickups',n1],['drop','Iron drop',n2],['ret','Quality',n3],['del','Deliver',n4]].map(t=>`<button class="${st==t[0]?'on':''}" onclick="st='${t[0]}';sa=0;window.scrollTo(0,0);R()">${t[1]}${t[2]?' <span class="pill w">'+t[2]+'</span>':''}</button>`).join('')}</nav><div style="height:70px"></div>`;
+ return h+nav;
+}
+function accept(id){const o=S.orders.find(x=>x.id==id),u=me();o.status='accepted';o.picker=S.session;lg(o,'Pickup accepted by '+u.name);toast('Pickup accepted');R()}
+function dropLot(){
+ const p=pr(+$('dp').value),u=me(),L=S.orders.filter(o=>o.status=='collected'&&o.picker==S.session&&$('dk'+o.id)&&$('dk'+o.id).checked);
+ if(!L.length)return toast('Select at least one bundle');
+ const lot='L'+(++S.n);
+ L.forEach(o=>{o.partner=p.id;o.status='dropped';o.lot=lot;lg(o,'Dropped to '+p.name)});
+ ntI(p,'Lot '+lot+' from '+u.name+': '+L.length+' bundles, '+L.reduce((a,o)=>a+o.collected,0)+' pcs (flats '+L.map(o=>o.flat).join(', ')+')',u.phone,u.name);
+ toast('Dropped to '+p.name+' – iron man notified');R()
+}
+function pickRet(id){const o=S.orders.find(x=>x.id==id),u=me();o.status='pickedup';o.picker=S.session;lg(o,'Picked up from '+pr(o.partner).name+' – on the way');ntI(pr(o.partner),'Order '+code(o)+' picked up by '+u.name,u.phone,u.name);toast('Picked up');R()}
+function dropPanel(L,all){return `<h2>${all?'All flats collected ✓ – ':''}Drop lot to iron man</h2>`+L.map(o=>`<label class="card row" style="cursor:pointer"><div><span class="lbl">${esc(code(o))}</span><div class="mu">Flat ${esc(o.flat)} · ${o.collected} pcs<br>${esc(ite(o))}</div></div><input type="checkbox" id="dk${o.id}" checked></label>`).join('')+`<div class="card"><h3>Select iron man</h3><select id="dp">${S.partners.filter(p=>p.ok).map(p=>`<option value="${p.id}">${esc(p.name)} · ${esc(p.area)} · free ${p.cap-load(p)}</option>`).join('')}</select><button class="btn w" style="margin-top:8px" onclick="dropLot()">Drop lot &amp; notify iron man</button></div>`}
+const avt=c=>'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="${c}"/><circle cx="50" cy="38" r="18" fill="#fff"/><path d="M15 95c4-28 66-28 70 0z" fill="#fff"/></svg>`);
+function demoBox(){
+ const has=S.users.some(u=>u.demo),rows=[['Customer – Anita (Sample Heights, A-101)',101],['Customer – Bharat (Sample Heights, B-202)',102],['Customer – Chitra (Lakeview, C-303)',103],['Customer – Deepak (apartment pending)',104],['Customer – Esha (Green Park, E-505)',105],['Customer – Farhan (Orchid Enclave, F-606)',106],['Iron man – Lakshmi Press',201],['Iron man – Ravi Iron Works',202],['Iron man – Fresh Fold',204],['Pickup boy – Kiran (approved)',301]];
+ return `<div class="card" style="margin-top:12px"><h3>Sample data for testing</h3><div class="mu" style="margin:4px 0 8px">Loads customers, shops, pickup boys and 10 orders at every stage. Tap a role to jump in, or sign in with its phone number and the on-screen OTP.</div><button class="btn g w" onclick="loadDemo()">${has?'Reset':'Load'} sample data</button>`+(has?rows.map(r=>`<button class="btn g w" style="margin-top:6px;text-align:left" onclick="demoIn(${r[1]})">${r[0]} · ${esc(S.users.find(u=>u.id==r[1]).phone)}</button>`).join(''):'')+'<div class="mu" style="margin-top:8px">Admin (above) can approve the pending shop, pickup boy and apartment request.</div></div>';
+}
+function demoIn(id){S.session=id;cs.apt=null;cs.flat='';cs.name='';st='apt';sa=0;window.scrollTo(0,0);R()}
+function loadDemo(){
+ const P=(id,name,owner,phone,area,addr,cap,ok)=>({id,name,owner,phone,area,addr,cap,av:'Mon–Sat, 9–7',ok,notes:[],docs:{id:'Aadhaar card – id.jpg',cert:'trade-licence.pdf'}});
+ S.partners=[P(1,'Lakshmi Press','Lakshmi','9000000002','Whitefield','Whitefield Main Rd',60,1),P(2,'Ravi Iron Works','Ravi','9000000012','Bellandur','Bellandur Gate',80,1),P(3,'Fresh Fold','Anil','9000000013','Marathahalli','Marathahalli Bridge',50,1),P(5,'Mohan Ironing','Mohan','9000000007','Panathur','Panathur Road',40,0)];
+ const U=(id,type,name,phone,x)=>Object.assign({id,type,name,phone,email:name.toLowerCase()+'@example.com',status:'approved',demo:1},x);
+ const dk=(a,v,l,c)=>({addr:a,id:'Aadhaar card – id.jpg',veh:v,lic:l,photo:avt(c)});
+ S.users=[U(101,'customer','Anita','9000000001',{apt:1,flat:'A-101'}),U(102,'customer','Bharat','9000000004',{apt:1,flat:'B-202'}),U(103,'customer','Chitra','9000000005',{apt:2,flat:'C-303'}),U(104,'customer','Deepak','9000000008',{flat:'D-404'}),U(105,'customer','Esha','9000000009',{apt:3,flat:'E-505'}),U(106,'customer','Farhan','9000000010',{apt:4,flat:'F-606'}),U(201,'ironman','Lakshmi','9000000002',{pid:1}),U(202,'ironman','Ravi','9000000012',{pid:2}),U(204,'ironman','Anil','9000000013',{pid:3}),U(203,'ironman','Mohan','9000000007',{pid:5}),U(301,'pickup','Kiran','9000000003',{docs:dk('HSR Layout','Activa KA01AB1234','DL123 – lic.jpg','#0f6e56')}),U(302,'pickup','Suresh','9000000006',{status:'pending',docs:dk('Marathahalli','Splendor KA05CD5678','DL456 – lic.jpg','#b4570a')})];
+ S.reqs=[{name:'Palm Meadows',area:'HSR Layout',addr:'Near HSR BDA complex, 27th Main',ok:0,uid:104}];
+ S.orders=[];S.n=1100;S.pn=[{text:'Sample: Ironed, ready for quality check: LR-A1-1007 at Lakshmi Press',tel:'9000000002',who:'Lakshmi Press',ts:nowS()}];
+ const mk=(id,uid,ap,flat,nm,ph,items,s,pt)=>{const i=ST.indexOf(s),tot=Object.entries(items).reduce((a,[k,q])=>a+q*S.price[k],0),n=Object.values(items).reduce((a,b)=>a+b,0);
+  const o={id,uid,apt:ap,flat,name:nm,phone:ph,slot:(d=>d+' '+apt(ap).sch[d])(Object.keys(apt(ap).sch)[0]),items,total:tot,status:s,payout:null,log:[]};
+  lg(o,'Booking confirmed & paid ₹'+tot);
+  if(i>=1){o.picker=301;lg(o,'Pickup accepted by Kiran')}
+  if(i>=2){o.coll=items;o.collected=n;lg(o,'Collected & labelled')}
+  if(i>=3){o.partner=pt;o.lot='L1';lg(o,'Dropped to '+S.partners.find(p=>p.id==pt).name)}
+  if(i>=4)o.received=n;if(i>=5)o.doneQty=n;if(i>=6){o.payout=Math.round(tot*.7);o.paid=0}
+  S.orders.push(o)};
+ const A=['Anita','9000000001'],B2=['Bharat','9000000004'],C=['Chitra','9000000005'],E=['Esha','9000000009'],F=['Farhan','9000000010'];
+ mk(1001,101,1,'A-101',...A,{Shirt:3,Kurta:2},'booked');
+ mk(1002,102,1,'B-202',...B2,{Saree:1,Bedsheet:2},'booked');
+ mk(1003,101,1,'A-101',...A,{Trousers:2,Shirt:2},'accepted');
+ mk(1004,102,1,'B-202',...B2,{Shirt:4,'T-shirt':3},'collected');
+ mk(1005,103,2,'C-303',...C,{Kurta:3,Saree:1},'dropped',2);
+ mk(1006,101,1,'A-101',...A,{Shirt:5},'ironing',1);
+ mk(1007,102,1,'B-202',...B2,{Trousers:3},'qc',1);
+ mk(1008,103,2,'C-303',...C,{Bedsheet:2,Shirt:2},'approved',2);
+ mk(1009,101,1,'A-101',...A,{'T-shirt':6},'pickedup',1);
+ mk(1010,102,1,'B-202',...B2,{Kurta:2},'delivered',1);
+ mk(1011,101,1,'A-101',...A,{Shirt:4,Saree:1},'delivered',1);
+ mk(1012,102,1,'B-202',...B2,{Shirt:3,Kurta:1},'dropped',1);
+ mk(1013,103,2,'C-303',...C,{Shirt:6},'booked');
+ mk(1014,103,2,'C-303',...C,{Saree:2},'accepted');
+ mk(1015,103,2,'C-303',...C,{Trousers:2,'T-shirt':4},'delivered',2);
+ mk(1016,105,3,'E-505',...E,{Kurta:2,Shirt:2},'booked');
+ mk(1017,105,3,'E-505',...E,{Bedsheet:2},'collected');
+ mk(1018,105,3,'E-505',...E,{Shirt:5,Trousers:2},'ironing',3);
+ mk(1019,105,3,'E-505',...E,{Saree:2},'qc',3);
+ mk(1020,105,3,'E-505',...E,{'T-shirt':5},'pickedup',3);
+ mk(1021,105,3,'E-505',...E,{Shirt:3,Kurta:3},'delivered',3);
+ mk(1022,106,4,'F-606',...F,{Shirt:4,Trousers:2},'booked');
+ mk(1023,106,4,'F-606',...F,{Saree:1,Kurta:2},'accepted');
+ mk(1024,106,4,'F-606',...F,{Bedsheet:1,Shirt:2},'approved',3);
+ mk(1025,106,4,'F-606',...F,{'T-shirt':3},'delivered',3);
+ S.session=null;au={step:'pick',type:'',mode:'up',f:{}};cs.apt=null;toast('Sample data loaded');R()
+}
+R();
+</script></body></html>
